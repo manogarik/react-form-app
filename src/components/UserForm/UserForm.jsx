@@ -8,13 +8,35 @@
     const [email, setEmail] = useState("");
  
  //On submission
- const handleSubmit = (e) =>{
+ const handleSubmit = async(e) =>{
     e.preventDefault();
-    alert(`Name : ${name}\n Phone : ${phone}\n Email : ${email}`);
-    //clearform
-    setName("");
-    setPhone("");
-    setEmail("");
+    const userData = {
+        name : name,
+        phone: phone,
+        email: email
+    };
+    try{
+        const response = await fetch("http://localhost:5000/users", {
+            method : POST,
+            headers: {
+                "Content-Type" : "application/json"
+            },
+            body:JSON.stringify(userData)
+        });
+        if(response.ok){
+            alert("Data saved successfully!");
+            setName("");
+            setPhone("");
+            setEmail("");
+        }
+        else{
+            alert("Failed to save data");
+        }
+    }
+    catch (error){
+        console.error(error);
+        alert("Server error");
+    }
  };
  
  return(
